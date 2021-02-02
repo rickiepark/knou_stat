@@ -1,3 +1,7 @@
+.ipynb_checkpoints
+.pyc
+.env
+
 # History files
 .Rhistory
 .Rapp.history
