@@ -21,6 +21,8 @@ IRkernel::installspec()
 conda create --name r
 conda activate r
 conda install -c r r-essentials
+
+$R (엔터)
 ```
 
 ## 과목
