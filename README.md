@@ -16,6 +16,13 @@ IRkernel::installspec()
 ```
 마지막으로 주피터 노트북을 실행하여 R 커널을 선택할 수 있는지 확인한다.
 
+또는 새로운 콘다 환경을 만들어 아나콘다 R 패키지를 설치할 수도 있다.
+```
+conda create --name r
+conda activate r
+conda install -c r r-essentials
+```
+
 ## 과목
 
 ### 2021년 1학기
