@@ -31,3 +31,4 @@ $R (엔터)
 
 1. [data_vis](data_vis): 데이터 시각화
 2. [r_computing](r_computing): R 컴퓨팅
+2. [regression_model](regression_model): 회귀 모형
