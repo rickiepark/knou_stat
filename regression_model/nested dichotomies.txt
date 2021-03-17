@@ -1,0 +1,159 @@
+> library(car)
+> data(Womenlf)
+> head(Womenlf)
+    partic hincome children  region
+1 not.work      15  present Ontario
+2 not.work      13  present Ontario
+6 not.work       7  present Ontario
+> a1 = c(1,2,3,4,1,2,3,4,1,2,3,4)
+> a1.factor = factor(a1)
+> is.factor(a1.factor)
+[1] TRUE
+> a1.factor
+ [1] 1 2 3 4 1 2 3 4 1 2 3 4
+Levels: 1 2 3 4
+> a1.dat = as.numeric(as.character(a1.factor))
+> a1.dat
+ [1] 1 2 3 4 1 2 3 4 1 2 3 4
+> attach(Womenlf)
+> working = recode(partic, " 'not.work' = 'no' ; else = 'yes' ")
+> w.data = cbind(Womenlf, working)
+> fulltime = recode(partic, " 'fulltime' = 'yes' ; 'parttime' = 'no' ; 'not.work' = NA ")
+> w.data = cbind(w.data,fulltime)
+> w.data[1:30,]
+     partic hincome children   region working fulltime
+1  not.work      15  present  Ontario      no     <NA>
+2  not.work      13  present  Ontario      no     <NA>
+7  not.work      15  present  Ontario      no     <NA>
+8  fulltime       7  present  Ontario     yes      yes
+9  not.work      15  present  Ontario      no     <NA>
+10 not.work      23  present  Ontario      no     <NA>
+11 not.work      23  present  Ontario      no     <NA>
+12 fulltime      13  present  Ontario     yes      yes
+13 not.work       9  present  Prairie      no     <NA>
+19 not.work      13  present  Ontario      no     <NA>
+20 not.work      13   absent  Ontario      no     <NA>
+21 parttime      19   absent  Ontario     yes       no
+22 not.work      23  present  Prairie      no     <NA>
+23 fulltime      10   absent  Prairie     yes      yes
+24 fulltime      11   absent  Ontario     yes      yes
+25 not.work      23  present  Ontario      no     <NA>
+29 not.work      17  present  Prairie      no     <NA>
+30 fulltime      14  present  Prairie     yes      yes
+> options(contrasts=c('contr.treatment','contr.poly'))
+> options('contrasts')
+$contrasts
+[1] "contr.treatment" "contr.poly"     
+
+> mod.working = glm(working ~ hincome+children+region, family=binomial)
+> summary(mod.working)
+
+Call:
+glm(formula = working ~ hincome + children + region, family = binomial)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.7927  -0.8828  -0.7283   0.9562   2.0074  
+
+Coefficients:
+                Estimate Std. Error z value Pr(>|z|)    
+(Intercept)      1.26771    0.55296   2.293   0.0219 *  
+hincome         -0.04534    0.02057  -2.204   0.0275 *  
+childrenpresent -1.60434    0.30187  -5.315 1.07e-07 ***
+regionBC         0.34196    0.58504   0.585   0.5589    
+regionOntario    0.18778    0.46762   0.402   0.6880    
+regionPrairie    0.47186    0.55680   0.847   0.3967    
+regionQuebec    -0.17310    0.49957  -0.347   0.7290    
+---
+Signif. codes:  0 ¡®***¡¯ 0.001 ¡®**¡¯ 0.01 ¡®*¡¯ 0.05 ¡®.¡¯ 0.1 ¡® ¡¯ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 356.15  on 262  degrees of freedom
+Residual deviance: 317.30  on 256  degrees of freedom
+AIC: 331.3
+
+Number of Fisher Scoring iterations: 4
+
+> mod.fulltime = glm(fulltime ~ hincome+children+region, family=binomial)
+> summary(mod.fulltime)
+
+Call:
+glm(formula = fulltime ~ hincome + children + region, family = binomial)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.5202  -0.8048   0.3583   0.7201   1.9957  
+
+Coefficients:
+                Estimate Std. Error z value Pr(>|z|)    
+(Intercept)      3.76164    1.05718   3.558 0.000373 ***
+hincome         -0.10475    0.04032  -2.598 0.009383 ** 
+childrenpresent -2.74781    0.56893  -4.830 1.37e-06 ***
+regionBC        -1.18248    1.02764  -1.151 0.249865    
+regionOntario   -0.14876    0.84703  -0.176 0.860589    
+regionPrairie   -0.39173    0.96310  -0.407 0.684200    
+regionQuebec     0.14842    0.93300   0.159 0.873612    
+---
+Signif. codes:  0 ¡®***¡¯ 0.001 ¡®**¡¯ 0.01 ¡®*¡¯ 0.05 ¡®.¡¯ 0.1 ¡® ¡¯ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 144.34  on 107  degrees of freedom
+Residual deviance: 101.84  on 101  degrees of freedom
+  (155 observations deleted due to missingness)
+AIC: 115.84
+
+Number of Fisher Scoring iterations: 5
+
+> Anova(mod.working)
+Analysis of Deviance Table (Type II tests)
+
+Response: working
+         LR Chisq Df Pr(>Chisq)    
+hincome    5.1256  1    0.02358 *  
+children  30.5483  1  3.257e-08 ***
+region     2.4315  4    0.65695    
+---
+Signif. codes:  0 ¡®***¡¯ 0.001 ¡®**¡¯ 0.01 ¡®*¡¯ 0.05 ¡®.¡¯ 0.1 ¡® ¡¯ 1
+> Anova(mod.fulltime)
+Analysis of Deviance Table (Type II tests)
+
+Response: fulltime
+         LR Chisq Df Pr(>Chisq)    
+hincome     7.838  1   0.005116 ** 
+children   31.908  1  1.616e-08 ***
+region      2.652  4   0.617619    
+---
+Signif. codes:  0 ¡®***¡¯ 0.001 ¡®**¡¯ 0.01 ¡®*¡¯ 0.05 ¡®.¡¯ 0.1 ¡® ¡¯ 1
+> mod.working.1 = update(mod.working, . ~ . - region)
+> mod.fulltime.1 = update(mod.fulltime, . ~ . - region)
+> predictors = expand.grid(hincome = 1:45, children=c('absent', 'present'))
+> predictors
+   hincome children
+1        1   absent
+2        2   absent
+44      44   absent
+45      45   absent
+46       1  present
+47       2  present
+89      44  present
+90      45  present
+> p.work=predict(mod.working.1, predictors, type='response')
+> p.fulltime=predict(mod.fulltime.1, predictors, type='response')
+> p.full = p.work*p.fulltime
+> p.part = p.work*(1-p.fulltime)
+> p.not = 1-p.work
+> par(mfrow=c(1,2))
+> plot(c(1,45),c(0,1), type='n', xlab="Husband's income", ylab='Fitted Prob.', main='Childrens Absent')
+> lines(1:45, p.not[1:45], lty=1, lwd=3)
+> lines(1:45, p.part[1:45], lty=2, lwd=3)
+> lines(1:45, p.fulltime[1:45], lty=3, lwd=3)
+> legend(locator(1), lty=1:3, lwd=3, legend=c('not working','part-time','full-time'))
+> plot(c(1,45),c(0,1), type='n', xlab="Husband's income", ylab='Fitted Prob.', main='Childrens Present')
+> lines(1:45, p.not[46:90], lty=1, lwd=3)
+> lines(1:45, p.part[46:90], lty=2, lwd=3)
+> lines(1:45, p.fulltime[46:90], lty=3, lwd=3)
+> legend(locator(1), lty=1:3, lwd=3, legend=c('not working','part-time','full-time'))
+> 
+
