@@ -1,0 +1,6 @@
+num	name	age	sex
+1	Lee		55	M
+2	Park	47	F
+3	So 		35	M
+4	Kim		26	F
+5	Yoon	29	M
